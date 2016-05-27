@@ -3,3 +3,4 @@ Flask-Session
 jsonresume-validator>=0.1.0
 colander
 jinja2
+gunicorn==18.0

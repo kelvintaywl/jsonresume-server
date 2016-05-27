@@ -48,7 +48,3 @@ def submit_form():
             flash('Please submit a JSON resume in the form', category="warning")
 
         return redirect(url_for('submit_form'))
-
-if __name__ == '__main__':
-    app.run()
-
