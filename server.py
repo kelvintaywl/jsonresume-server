@@ -5,17 +5,24 @@ import logging
 
 import colander
 from flask import (
+    flash,
     Flask,
-    jsonify,
-    make_response,
+    redirect,
     render_template,
-    request
+    request,
+    url_for
 )
+from flask.ext.session import Session
 
 from jsonresume.schema.resume import Resume as ResumeSchema
 
 
 app = Flask(__name__)
+app.secret_key = 'RQtlBBBfHh9QbMSC99Ds'  # bad example, we should perhaps put it in an env var
+app.config['SESSION_TYPE'] = 'filesystem'
+app.debug = True
+sess = Session()
+sess.init_app(app)
 
 
 def allowed_file(filename):
@@ -29,18 +36,18 @@ def submit_form():
     elif request.method == 'POST':
         fil = request.files['file']
         if fil and allowed_file(fil.filename):
-            print('data')
             try:
                 data = json.load(fil)
-                print("data: {}".format(data))
                 ResumeSchema().deserialize(data)
+                flash("Success", category="success")
             except colander.Invalid as e:
                 logging.exception("Invalid JSON resume content")
-                err_resp = make_response(json.dumps(e), 400)
-                err_resp.headers['Content-Type'] = 'application/json'
-                return err_resp
+                flash(e, category="error")
+        else:
+            # no file detected
+            flash('Please submit a JSON resume in the form', category="warning")
 
-            return jsonify({"status": "ok"})
+        return redirect(url_for('submit_form'))
 
 if __name__ == '__main__':
     app.run()

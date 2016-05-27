@@ -5,18 +5,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-rc1/jquery.slim.js"></script>
     <script src="{{ url_for('static', filename='semantic.min.js') }}"></script>
 </head>
+<style>
+    body {
+      background-color: #F7F7F7;
+    }
+    body > .grid {
+      height: 100%;
+    }
+    .image {
+      margin-top: -100px;
+    }
+    .column {
+      max-width: 450px;
+    }
+</style>
 <body>
-    <div class="ui container">
-        <h1>JSON Resume Server</h1>
-        <h2>built with Flask</h2>
-        <div class="ui divider"></div>
-        {% with messages = get_flashed_messages() %}
+    <div class="ui middle aligned center aligned grid">
+        <div class="column">
+        <h2 class="ui image grey header">
+            <div class="content">
+                Upload and Validate Your JSON Resume here
+            </div>
+        </h2>
+        {% block body %}{% endblock %}
+        <div class="ui info message">
+            view <a href="https://github.com/kelvintaywl/jsonresume-server" target="_blank">code on Github</a>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for message in messages %}
-                    <div class="ui message"><p>{{ message }}</p></div>
+                {% for category, message in messages %}
+                    <div class="ui {{ category }} message">
+                        <div class="header">
+                        {% if category == "error" %}Missing / Invalid Value in Resume{% endif %}
+                        </div>
+                        <p>{{ message }}</p>
+                    </div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        {% block body %}{% endblock %}
+        </div>
     </div>
 </body>

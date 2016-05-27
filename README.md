@@ -3,6 +3,10 @@
 Sample Flask app to demonstrate how to use the [JSON Resume Validator](https://github.com/kelvintaywl/jsonresume-validator) library
 
 
+## Screenshot
+
+![screenshot of JSON Resume server sample app](jsonresume_server.png)
+
 ## Instructions
 
 - Install requirements.
